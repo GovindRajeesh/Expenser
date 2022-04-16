@@ -61,6 +61,7 @@ class _TransactionViewState extends State<TransactionView> {
               ),
               padding: EdgeInsets.all(20),
             ),
+            if(transaction.name.toString()!="Opening balance")
             Container(
               child: Padding(
                 child: Row(children: [
@@ -68,7 +69,7 @@ class _TransactionViewState extends State<TransactionView> {
                       onPressed: onDelete != null
                           ? (onDelete as void Function())
                           : null,
-                      icon: Icon(Icons.delete)),
+                      icon: Icon(Icons.delete,color:Colors.black)),
                 ]),
                 padding: EdgeInsets.only(left: 10),
               ),

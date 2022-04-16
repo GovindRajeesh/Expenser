@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import "package:syncfusion_flutter_charts/charts.dart";
 
-
 class TransListView extends StatefulWidget {
   final int? id;
   const TransListView({Key? key, this.id}) : super(key: key);
@@ -29,6 +28,8 @@ class _TransListViewState extends State<TransListView> {
   num? moneySpent;
   num? moneyEarned;
   TransList transList = TransList();
+  TextStyle columnTextStyle = TextStyle(fontSize: 20, color: Colors.white);
+  TextStyle rowTextStyle = TextStyle(fontSize: 20, color: Colors.white);
   var catExpenses = [];
 
   void getFromDb() async {
@@ -141,7 +142,7 @@ class _TransListViewState extends State<TransListView> {
                                 ),
                                 Padding(
                                   padding: EdgeInsets.all(10),
-                                  child: Text("$balance",
+                                  child: Text(formattedNum(balance),
                                       style: TextStyle(fontSize: 20)),
                                 ),
                                 Padding(
@@ -196,11 +197,6 @@ class _TransListViewState extends State<TransListView> {
                         Padding(
                           padding: EdgeInsets.all(10),
                         ),
-                        Center(
-                            child: Text(
-                          "Categories",
-                          style: TextStyle(fontSize: 30),
-                        )),
                         if (categories.length == 0)
                           NavigateToTab(
                               tabIndex: 2,
@@ -211,25 +207,68 @@ class _TransListViewState extends State<TransListView> {
                                 ),
                               )),
                         if (categories.length > 0)
-                          SfCircularChart(
-                            title: ChartTitle(
-                                text: "Expenses made in each category"),
-                            legend: Legend(
-                              isVisible: true,
-                              borderWidth: 1,
-                              borderColor: Colors.grey[300],
-                            ),
-                            series: [
-                              PieSeries(
-                                  dataSource: catExpenses,
-                                  xValueMapper: (map, i) => map["name"],
-                                  yValueMapper: (map, i) => (map["expense"] as num).toInt(),
-                                  dataLabelSettings: DataLabelSettings(
-                                      isVisible: true,
-                                      textStyle: TextStyle(
-                                          fontSize: 15, color: Colors.white)))
-                            ],
-                          ),
+                          Container(
+                              decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 43, 43, 43),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              
+                              child: Column(children: <Widget>[
+                                SfCircularChart(
+                                  title: ChartTitle(
+                                      text: "Expenses made in each category",
+                                      textStyle:
+                                          TextStyle(color: Colors.white)),
+                                  legend: Legend(
+                                    isVisible: true,
+                                    borderWidth: 1,
+                                    borderColor: Colors.grey[300],
+                                    textStyle: TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
+                                  series: [
+                                    PieSeries(
+                                        dataSource: catExpenses,
+                                        enableTooltip: true,
+                                        xValueMapper: (map, i) => map["name"],
+                                        yValueMapper: (map, i) =>
+                                            (map["expense"] as num).toInt(),
+                                        dataLabelSettings: DataLabelSettings(
+                                            isVisible: true,
+                                            textStyle: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.white)))
+                                  ],
+                                ),
+                                Container(
+                                    width: double.infinity,
+                                    child: Center(
+                                      child: DataTable(
+                                          dataTextStyle:
+                                              TextStyle(color: Colors.white),
+                                          columns: [
+                                            DataColumn(
+                                                label: Text("Category",
+                                                    style: columnTextStyle)),
+                                            DataColumn(
+                                                label: Text("Expense",
+                                                    style: columnTextStyle),
+                                                numeric: true),
+                                          ],
+                                          rows: catExpenses.map((e) {
+                                            return DataRow(cells: [
+                                              DataCell(Text(
+                                                e["name"],
+                                                style: rowTextStyle,
+                                              )),
+                                              DataCell(Text(
+                                                formattedNum(e["expense"]),
+                                                style: rowTextStyle,
+                                              )),
+                                            ]);
+                                          }).toList()),
+                                    ))
+                              ]))
                       ],
                     ),
                     TransactionsView(

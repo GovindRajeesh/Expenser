@@ -231,7 +231,7 @@ class _CategoryViewState extends State<CategoryView> {
                                                           },
                                                         )));
                                           },
-                                          icon: Icon(Icons.add)),
+                                          icon: Icon(Icons.add,color:Colors.black)),
                                       IconButton(
                                           tooltip:
                                               "Remove the selected from the category ${category['name']}",
@@ -257,7 +257,7 @@ class _CategoryViewState extends State<CategoryView> {
                                             });
                                             onTransListUpdate();
                                           },
-                                          icon: Icon(Icons.remove)),
+                                          icon: Icon(Icons.remove,color:Colors.black)),
                                       IconButton(
                                           tooltip:
                                               "Delete the category ${category['name']}",
@@ -300,7 +300,7 @@ class _CategoryViewState extends State<CategoryView> {
                                                       ],
                                                     ));
                                           },
-                                          icon: Icon(Icons.delete)),
+                                          icon: Icon(Icons.delete,color:Colors.black)),
                                     ]),
                                   ),
                                 ),
